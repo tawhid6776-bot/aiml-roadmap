@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>730 দিনের AI/ML রোডম্যাপ</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b12;--s1:#0d1320;--s2:#111926;--s3:#172033;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --text:#dce6f5;--muted:#5c6b87;--dim:#2a3450;
+  --math:#f5c518;--python:#4ade80;--ml:#60a5fa;--dl:#f472b6;
+  --nlp:#fb923c;--llm:#a78bfa;--ft:#34d399;--rag:#22d3ee;
+  --mlops:#fbbf24;--llmops:#e879f9;--cloud:#38bdf8;
+  --proj:#fb7185;--job:#a3e635;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Hind Siliguri',sans-serif;display:flex;flex-direction:column}
+
+/* ── TOP BAR ── */
+.topbar{
+  height:52px;background:var(--s1);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:16px;padding:0 20px;flex-shrink:0;
+  position:relative;z-index:50;
+}
+.topbar-logo{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:900;
+  background:linear-gradient(135deg,#fff 0%,#a78bfa 60%,#22d3ee 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.topbar-sep{width:1px;height:24px;background:var(--border)}
+.total-wrap{display:flex;align-items:center;gap:10px;flex:1;max-width:360px}
+.total-bar-track{flex:1;height:5px;background:var(--dim);border-radius:9px;overflow:hidden}
+.total-bar-fill{height:100%;border-radius:9px;background:linear-gradient(90deg,#a78bfa,#22d3ee);transition:width .5s}
+.total-label{font-size:11px;color:var(--muted);white-space:nowrap}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.day-counter{font-size:11px;color:var(--muted);background:var(--s3);padding:4px 12px;border-radius:100px;border:1px solid var(--border)}
+
+/* ── LAYOUT ── */
+.app{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:220px;flex-shrink:0;background:var(--s1);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.sidebar-scroll{flex:1;overflow-y:auto;padding:8px 0}
+.sidebar-scroll::-webkit-scrollbar{width:3px}
+.sidebar-scroll::-webkit-scrollbar-thumb{background:var(--dim);border-radius:3px}
+
+.phase-btn{
+  width:100%;padding:9px 14px;border:none;background:none;cursor:pointer;
+  display:flex;align-items:center;gap:9px;border-left:3px solid transparent;
+  transition:all .15s;text-align:left;
+}
+.phase-btn:hover{background:rgba(255,255,255,0.03)}
+.phase-btn.active{background:rgba(255,255,255,0.05)}
+.ph-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ph-info{flex:1;min-width:0}
+.ph-name{font-size:11.5px;font-weight:600;color:var(--text);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ph-days{font-size:9.5px;color:var(--muted)}
+.ph-pct{font-size:10.5px;font-weight:700;white-space:nowrap}
+
+/* ── CENTER: DAY GRID ── */
+.center{flex:1;overflow-y:auto;padding:20px;min-width:0}
+.center::-webkit-scrollbar{width:4px}
+.center::-webkit-scrollbar-thumb{background:var(--dim);border-radius:4px}
+
+.phase-header{margin-bottom:16px;animation:fadeIn .4s ease}
+.ph-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 8px;
+  border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;margin-bottom:8px;border:1px solid}
+.ph-title{font-family:'Unbounded',sans-serif;font-size:1.2rem;font-weight:900;color:#fff;margin-bottom:4px}
+.ph-desc{font-size:12px;color:var(--muted)}
+
+.phase-stats{display:flex;align-items:center;gap:12px;margin-bottom:20px;
+  background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:12px 16px}
+.pst-val{font-size:1.3rem;font-weight:700;font-family:'DM Mono',monospace}
+.pst-label{font-size:10px;color:var(--muted);margin-top:1px}
+.pst-bar-wrap{flex:1}
+.pst-bar-label{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:5px}
+.pst-bar-track{height:6px;background:var(--dim);border-radius:9px;overflow:hidden}
+.pst-bar-fill{height:100%;border-radius:9px;transition:width .5s}
+
+.day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+
+.day-card{
+  background:var(--s2);border:1px solid var(--border);border-radius:12px;
+  padding:12px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden;
+  animation:fadeIn .3s ease both;
+}
+.day-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0;opacity:0;transition:opacity .2s}
+.day-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.day-card:hover::before{opacity:1}
+.day-card.selected{border-color:rgba(167,139,250,0.4);background:var(--s3)}
+.day-card.done{border-color:rgba(74,222,128,0.25);background:rgba(74,222,128,0.04)}
+.day-card.project-day{border-style:dashed}
+
+.dc-num{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:4px}
+.dc-title{font-size:11px;font-weight:600;color:var(--text);line-height:1.4;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dc-badges{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.dc-badge{font-size:8.5px;padding:1px 6px;border-radius:4px;font-weight:700;letter-spacing:.5px}
+.dc-done-check{position:absolute;top:8px;right:8px;width:14px;height:14px;
+  background:#4ade80;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:8px;color:#000;font-weight:900;opacity:0;transition:opacity .2s}
+.day-card.done .dc-done-check{opacity:1}
+
+/* ── RIGHT: DETAIL PANEL ── */
+.detail{
+  width:380px;flex-shrink:0;background:var(--s1);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.detail-scroll{flex:1;overflow-y:auto;padding:20px}
+.detail-scroll::-webkit-scrollbar{width:3px}
+.detail-scroll::-webkit-scrollbar-thumb{background:var(--dim);border-radius:3px}
+
+.detail-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:100%;gap:12px;color:var(--muted);text-align:center;padding:20px}
+.detail-empty svg{width:48px;height:48px;opacity:.3}
+.detail-empty p{font-size:13px;line-height:1.6}
+
+.detail-header{margin-bottom:16px}
+.det-day-label{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.det-title{font-family:'Unbounded',sans-serif;font-size:.95rem;font-weight:900;color:#fff;line-height:1.4;margin-bottom:8px}
+.det-phase-tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;
+  padding:3px 10px;border-radius:100px;border:1px solid;letter-spacing:.5px;text-transform:uppercase}
+
+.det-actions{display:flex;gap:8px;margin-bottom:20px}
+.btn-generate{flex:1;padding:9px;border-radius:10px;border:none;cursor:pointer;
+  font-family:'Hind Siliguri',sans-serif;font-size:12px;font-weight:700;
+  background:linear-gradient(135deg,#a78bfa,#60a5fa);color:#fff;transition:opacity .2s}
+.btn-generate:hover{opacity:.85}
+.btn-generate:disabled{opacity:.5;cursor:not-allowed}
+.btn-done{padding:9px 14px;border-radius:10px;border:1px solid var(--border2);background:none;
+  color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;font-family:'Hind Siliguri',sans-serif;
+  transition:all .2s;white-space:nowrap}
+.btn-done:hover{border-color:#4ade80;color:#4ade80}
+.btn-done.done-active{background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3);color:#4ade80}
+
+/* Loading */
+.loading-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;padding:40px 0;color:var(--muted)}
+.spinner{width:32px;height:32px;border:2px solid var(--dim);border-top-color:#a78bfa;
+  border-radius:50%;animation:spin 0.7s linear infinite}
+.loading-text{font-size:12px}
+
+/* Content sections */
+.det-section{margin-bottom:18px}
+.det-sec-title{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.det-sec-title span{font-size:14px}
+
+.video-card{background:var(--s2);border:1px solid var(--border);border-radius:10px;
+  padding:12px;margin-bottom:8px}
+.vc-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.4}
+.vc-meta{display:flex;justify-content:space-between;align-items:center}
+.vc-channel{font-size:10.5px;color:var(--muted)}
+.vc-dur{font-size:10px;background:rgba(255,255,255,.05);padding:2px 8px;border-radius:4px;
+  color:var(--muted);font-family:'DM Mono',monospace}
+.vc-search-btn{margin-top:8px;width:100%;padding:6px;border:1px solid var(--border);background:none;
+  border-radius:7px;color:var(--muted);font-size:11px;cursor:pointer;font-family:'Hind Siliguri',sans-serif;
+  transition:all .2s}
+.vc-search-btn:hover{border-color:var(--border2);color:var(--text)}
+
+.gemini-card{background:linear-gradient(135deg,rgba(26,188,156,0.08),rgba(52,211,153,0.05));
+  border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:12px;margin-bottom:8px}
+.gc-label{font-size:9.5px;font-weight:700;color:#34d399;letter-spacing:1.5px;
+  text-transform:uppercase;margin-bottom:6px}
+.gc-prompt{font-size:11.5px;color:var(--text);line-height:1.6;
+  background:rgba(0,0,0,.2);border-radius:7px;padding:10px;border:1px solid rgba(52,211,153,0.1)}
+.gc-copy-btn{margin-top:8px;width:100%;padding:7px;border:1px solid rgba(52,211,153,0.3);
+  background:rgba(52,211,153,0.08);border-radius:7px;color:#34d399;font-size:11px;
+  cursor:pointer;font-family:'Hind Siliguri',sans-serif;font-weight:600;transition:all .2s}
+.gc-copy-btn:hover{background:rgba(52,211,153,0.15)}
+.gc-copy-btn.copied{background:rgba(52,211,153,0.2);color:#6ee7b7}
+
+.coding-card{background:var(--s2);border:1px solid var(--border);border-left:3px solid #60a5fa;
+  border-radius:10px;padding:12px;margin-bottom:8px}
+.cc-task{font-size:12px;color:var(--text);line-height:1.5;margin-bottom:6px}
+.cc-hint{font-size:10.5px;color:var(--muted);font-style:italic}
+
+.proj-card{background:linear-gradient(135deg,rgba(251,113,133,.1),rgba(251,146,60,.06));
+  border:1px solid rgba(251,113,133,0.25);border-radius:10px;padding:14px}
+.proj-title{font-size:12px;font-weight:700;color:#fb7185;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px}
+.proj-task{font-size:11.5px;color:var(--text);line-height:1.6;padding-left:12px;position:relative}
+.proj-task::before{content:'→';position:absolute;left:0;color:var(--muted)}
+
+.notes-list{list-style:none}
+.notes-list li{font-size:11.5px;color:var(--text);padding:4px 0;padding-left:14px;
+  position:relative;border-bottom:1px solid var(--border);line-height:1.5}
+.notes-list li::before{content:'▸';position:absolute;left:0;color:var(--muted)}
+
+.check-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.check-item:last-child{border-bottom:none}
+.check-cb{width:15px;height:15px;border-radius:4px;border:1px solid var(--dim);
+  background:none;cursor:pointer;appearance:none;-webkit-appearance:none;
+  flex-shrink:0;margin-top:1px;position:relative;transition:all .15s}
+.check-cb:checked{background:#4ade80;border-color:#4ade80}
+.check-cb:checked::after{content:'✓';position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;font-size:9px;color:#000;font-weight:900}
+.check-label{font-size:11.5px;color:var(--text);line-height:1.5;cursor:pointer}
+.check-item:has(.check-cb:checked) .check-label{color:var(--muted);text-decoration:line-through}
+
+/* Gemini open button */
+.gemini-open-btn{
+  display:block;width:100%;padding:10px;margin-top:12px;
+  background:linear-gradient(135deg,rgba(26,188,156,.15),rgba(52,211,153,.08));
+  border:1px solid rgba(52,211,153,.3);border-radius:10px;
+  color:#34d399;font-size:12px;font-weight:700;cursor:pointer;text-align:center;
+  font-family:'Hind Siliguri',sans-serif;text-decoration:none;transition:all .2s;
+}
+.gemini-open-btn:hover{background:rgba(52,211,153,.2)}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* Scrollbar global */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--dim);border-radius:4px}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">AI/ML 730 দিন</div>
+  <div class="topbar-sep"></div>
+  <div class="total-wrap">
+    <div class="total-label" id="total-label">মোট ০%</div>
+    <div class="total-bar-track"><div class="total-bar-fill" id="total-fill" style="width:0%"></div></div>
+    <div class="total-label" id="total-done-label">০/৭৩০</div>
+  </div>
+  <div class="topbar-right">
+    <div class="day-counter" id="streak-display">🔥 Streak: ০ দিন</div>
+  </div>
+</div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-scroll" id="sidebar-nav"></div>
+  </nav>
+
+  <!-- CENTER: DAY GRID -->
+  <div class="center" id="center-panel">
+    <div class="phase-header" id="phase-header"></div>
+    <div class="phase-stats" id="phase-stats"></div>
+    <div class="day-grid" id="day-grid"></div>
+  </div>
+
+  <!-- RIGHT: DETAIL PANEL -->
+  <div class="detail">
+    <div class="detail-scroll" id="detail-panel">
+      <div class="detail-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+        </svg>
+        <p>বাম দিক থেকে যেকোনো দিন<br>সিলেক্ট করুন।<br><br>AI সেই দিনের ভিডিও, Gemini<br>প্রম্পট ও কোডিং টাস্ক<br>তৈরি করবে।</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// ROADMAP DATA — 730 DAYS
+// ═══════════════════════════════════════════
+const phases=[
+{id:'math',bn:'গণিত',en:'Mathematics',color:'#f5c518',icon:'📐',
+topics:[
+'Vectors ও Scalars — সংজ্ঞা, notation, geometric meaning',
+'Vector Operations — addition, subtraction, scalar multiplication',
+'Dot Product ও Magnitude — formula, geometric interpretation',
+'Cross Product ও Applications',
+'Matrix Basics — types (square, rectangular, identity, zero)',
+'Matrix Addition, Subtraction ও Scalar Multiplication',
+'Matrix Multiplication — row-column method, rules',
+'Transpose ও Symmetric Matrices — properties',
+'Inverse Matrix — conditions, formula, np.linalg.inv()',
+'Determinants — 2×2, 3×3, cofactor expansion',
+'Linear Systems — Gaussian Elimination, row reduction',
+'Eigenvalues — characteristic equation det(A-λI)=0',
+'Eigenvectors — calculation, geometric meaning',
+'SVD — Singular Value Decomposition, A=UΣVᵀ',
+'Vector Norms — L1, L2, Frobenius norm',
+'🏗️ PROJECT: PCA From Scratch using NumPy (no sklearn)',
+'Linear Algebra Revision — Vectors ও Matrices review',
+'Linear Algebra Practice Problems — Mixed set',
+'Positive Definite Matrices ও Covariance Matrix',
+'Linear Algebra Final Test — Self Assessment',
+'Functions, Limits ও Continuity — definitions, rules',
+'Derivatives — Power Rule, Sum Rule, Constant Rule',
+'Chain Rule, Product Rule, Quotient Rule',
+'Common Derivatives — sin, cos, exp, log, tanh',
+'Partial Derivatives — multivariable functions',
+'Gradient Vector — ∇f = [∂f/∂x, ∂f/∂y]',
+'Gradient Descent Algorithm — θ = θ - α∇f',
+'Learning Rate Effect — too small, too large, just right',
+'Hessian Matrix ও Second-Order Optimization',
+'Integrals — basic antiderivatives, indefinite integral',
+'Definite Integrals ও Area Under Curve — probability connection',
+'Optimization — finding minima, maxima, saddle points',
+'Convex vs Non-convex Functions — ML implications',
+'Taylor Series ও Linear Approximation',
+'🏗️ PROJECT: Gradient Descent Visualizer (2D ও 3D plots)',
+'Backpropagation Math — chain rule through computation graph',
+'Numerical Differentiation — finite differences',
+'Calculus in Neural Networks — loss function derivatives',
+'Calculus Revision — all rules practice',
+'Calculus Final Test — Self Assessment',
+'Descriptive Statistics — mean, median, mode, range',
+'Variance ও Standard Deviation — formula, intuition',
+'Covariance ও Correlation Coefficient',
+'Probability Basics — sample space, events, axioms',
+'Conditional Probability — P(A|B), multiplication rule',
+"Bayes' Theorem — prior, likelihood, posterior",
+'Random Variables — discrete vs continuous, PMF, PDF, CDF',
+'Normal (Gaussian) Distribution — properties, Z-score',
+'Binomial ও Poisson Distributions',
+'Central Limit Theorem — intuition ও importance',
+'Hypothesis Testing — H₀ vs H₁, test statistics',
+'p-value ও Significance Level (α = 0.05)',
+'Type I ও Type II Errors — False Positive, False Negative',
+'Confidence Intervals ও t-test',
+'🏗️ PROJECT: Statistical EDA on Titanic Dataset',
+'Information Theory — Entropy, KL Divergence, Cross-Entropy',
+'Maximum Likelihood Estimation (MLE)',
+'Bayesian Inference basics',
+'Statistics Revision — all topics',
+'Math Foundation Complete — Full Review ও Assessment',
+]},
+{id:'python',bn:'পাইথন',en:'Python',color:'#4ade80',icon:'🐍',
+topics:[
+'Python Setup — Anaconda, Jupyter Notebook, VS Code install',
+'Variables, Data Types — int, float, str, bool, None',
+'Operators — arithmetic, comparison, logical, bitwise',
+'Strings — indexing, slicing, methods, f-strings',
+'Lists — creation, indexing, slicing, methods',
+'Tuples, Sets ও Dictionaries',
+'Control Flow — if/elif/else, while, for loops',
+'List Comprehension ও Dictionary Comprehension',
+'Functions — def, parameters, return, default args, *args, **kwargs',
+'Lambda Functions, map(), filter(), zip()',
+'File I/O — read, write, CSV, JSON',
+'Exception Handling — try/except/finally, custom exceptions',
+'Modules ও Packages — import, pip, virtual environments',
+'🏗️ PROJECT: Data Processing CLI Tool',
+'OOP Basics — Class, Object, __init__, self',
+'Instance Methods, Class Methods, Static Methods',
+'Inheritance ও super()',
+'Encapsulation, Polymorphism, Magic Methods',
+'Decorators ও Context Managers',
+'🏗️ PROJECT: OOP-based ML Dataset Handler Class',
+'NumPy Arrays — creation, dtype, shape, indexing',
+'NumPy Operations — broadcasting, ufuncs, aggregations',
+'NumPy Linear Algebra — linalg module',
+'NumPy Random ও Statistics functions',
+'NumPy Advanced — vectorization, performance tips',
+'Pandas Series ও DataFrame — creation, basic operations',
+'Pandas Data Selection — loc, iloc, boolean indexing',
+'Pandas Data Cleaning — missing values, duplicates, types',
+'Pandas GroupBy, Merge, Pivot Table',
+'🏗️ PROJECT: Complete EDA Notebook (Titanic/Iris Dataset)',
+]},
+{id:'ml',bn:'Machine Learning',en:'ML',color:'#60a5fa',icon:'🤖',
+topics:[
+'ML Types — Supervised, Unsupervised, RL overview',
+'ML Workflow — data→features→model→evaluate→deploy',
+'Train/Validation/Test Split — ratios, data leakage prevention',
+'Feature Engineering Basics — scaling, encoding overview',
+'Sklearn API Overview — fit, predict, transform pattern',
+'Linear Regression Theory — MSE loss, normal equation',
+'Linear Regression with Sklearn — R², MAE, RMSE metrics',
+'Multiple ও Polynomial Regression',
+'Ridge (L2) Regularization — concept ও sklearn',
+'Lasso (L1) ও ElasticNet Regularization',
+'Logistic Regression — sigmoid, binary cross-entropy',
+'Multiclass Classification — OvR, Softmax',
+'Evaluation Metrics — Accuracy, Precision, Recall, F1',
+'ROC Curve, AUC Score, Confusion Matrix',
+'Decision Trees — Gini, Entropy, Information Gain',
+'Decision Tree Pruning ও Hyperparameters',
+'Random Forest — Bagging, feature importance',
+'Gradient Boosting — AdaBoost, GBM concept',
+'XGBoost — install, parameters, practical use',
+'LightGBM ও CatBoost',
+'SVM — hyperplane, margin, kernel trick',
+'SVM Kernels — RBF, Polynomial, Linear',
+'KNN — distance metrics, choosing K',
+'Naive Bayes — Gaussian, Multinomial',
+'🏗️ PROJECT: Titanic Survival Prediction (5 Algorithms Compare)',
+'K-Means Clustering — algorithm, elbow method',
+'DBSCAN ও Hierarchical Clustering',
+'PCA — explained variance, sklearn',
+'t-SNE ও UMAP — dimensionality reduction viz',
+'Anomaly Detection — Isolation Forest, One-Class SVM',
+'K-Fold Cross Validation ও Stratified K-Fold',
+'Bias-Variance Tradeoff — learning curves',
+'GridSearchCV ও RandomizedSearchCV',
+'Optuna — Bayesian Hyperparameter Optimization',
+'Feature Selection — SelectKBest, RFE, feature importance',
+'Sklearn Pipeline ও ColumnTransformer',
+'Imbalanced Data — SMOTE, class_weight',
+'Handling Missing Data — strategies, imputation',
+'Categorical Encoding — OHE, Target Encoding',
+'Feature Scaling — StandardScaler, MinMaxScaler',
+'🏗️ PROJECT: House Price Prediction (Full ML Pipeline)',
+'🏗️ PROJECT: Customer Churn Prediction',
+'Kaggle Introduction — platform, kernels, submissions',
+'ML Revision — all algorithms review',
+'ML Final Assessment ও Knowledge Check',
+]},
+{id:'dl',bn:'Deep Learning',en:'DL',color:'#f472b6',icon:'🧠',
+topics:[
+'Neural Network Intuition — perceptron, MLP structure',
+'Activation Functions — Sigmoid, Tanh, ReLU, variants',
+'Forward Pass — manual calculation through layers',
+'Loss Functions — MSE, Binary CE, Categorical CE',
+'Backpropagation — chain rule, gradient flow',
+'Gradient Descent Variants — SGD, Momentum, RMSprop',
+'Adam Optimizer — theory ও parameters',
+'Dropout ও Regularization in NN',
+'Batch Normalization ও Layer Normalization',
+'Weight Initialization — Xavier, He',
+'Learning Rate Scheduling — cosine, step, warmup',
+'Early Stopping ও Model Checkpointing',
+'PyTorch Tensors — creation, operations, autograd',
+'PyTorch nn.Module — building neural networks',
+'🏗️ PROJECT: MLP for MNIST from Scratch (PyTorch)',
+'Convolution Operation — kernel, feature maps, stride, padding',
+'Pooling Layers — MaxPool, AvgPool, Global Pooling',
+'CNN Architecture — Conv→Pool→FC structure',
+'PyTorch DataLoader ও Custom Dataset',
+'Training Loop ও Validation Loop (PyTorch)',
+'LeNet-5 Implementation from Scratch',
+'AlexNet Architecture ও ImageNet Innovations',
+'VGG Networks — deep simple architecture',
+'ResNet ও Skip Connections — solving vanishing gradient',
+'EfficientNet ও Modern CNN Architectures',
+'Transfer Learning — feature extraction concept',
+'Fine-tuning Pretrained Models (torchvision)',
+'Data Augmentation — transforms, Albumentations',
+'Grad-CAM ও CNN Visualization',
+'🏗️ PROJECT: Image Classifier (CIFAR-10) with Transfer Learning',
+'Object Detection Overview — YOLO, R-CNN family',
+'YOLOv8 — install, inference, custom training',
+'Image Segmentation — Semantic vs Instance',
+'GANs Introduction — Generator, Discriminator',
+'🏗️ PROJECT: Custom Object Detector (simple class)',
+'Sequence Data ও RNN Architecture',
+'Vanishing Gradient in RNN — problem ও solutions',
+'LSTM — cell state, forget/input/output gates',
+'GRU — simplified LSTM',
+'Bidirectional RNN/LSTM',
+'Stacked LSTM ও Dropout in RNN',
+'Time Series Forecasting with LSTM',
+'Text Classification with LSTM',
+'Encoder-Decoder (Seq2Seq) Architecture',
+'🏗️ PROJECT: Sentiment Analyzer with BiLSTM',
+'Attention Mechanism Intuition',
+'Self-Attention — Q, K, V matrices',
+'Scaled Dot-Product Attention — formula, masking',
+'Multi-Head Attention',
+'Positional Encoding — sinusoidal, learned',
+'Transformer Encoder Block — MHA + FFN + LayerNorm',
+'Transformer Decoder Block — masked attention, cross-attention',
+'Full Transformer Architecture Overview',
+'Transformer Implementation (PyTorch, from scratch)',
+'GPU Training — CUDA, mixed precision, torch.compile()',
+'🏗️ PROJECT: Character-Level Language Model (nanoGPT style)',
+'W&B Experiment Tracking setup ও training workflow',
+'HuggingFace Intro — transformers library, model hub',
+'DL Performance Tips — profiling, bottlenecks',
+'🏗️ PROJECT: Kaggle DL Competition Entry',
+'DL Revision Day 1 — NN, Activation, Backprop',
+'DL Revision Day 2 — CNN architectures',
+'DL Revision Day 3 — RNN, LSTM, Transformers',
+'Deep Learning Final Assessment',
+'DL Phase Complete — Portfolio Review',
+]},
+{id:'nlp',bn:'NLP',en:'NLP',color:'#fb923c',icon:'📝',
+topics:[
+'NLP Introduction — tasks, applications, challenges',
+'Text Preprocessing — tokenization, lowercasing, punctuation',
+'Stop Words, Stemming (NLTK), Lemmatization (spaCy)',
+'Regular Expressions for Text Cleaning',
+'Bag of Words ও CountVectorizer',
+'TF-IDF — formula, TfidfVectorizer, N-grams',
+'Text Classification with TF-IDF + ML',
+'spaCy Pipeline — NER, POS tagging, Dependency parsing',
+'Word Embeddings Introduction — distributed representation',
+'Word2Vec — CBOW ও Skip-gram, gensim',
+'GloVe ও FastText embeddings',
+'Embedding visualization — t-SNE, word analogies',
+'HuggingFace Transformers — AutoTokenizer, AutoModel',
+'Tokenization Deep Dive — BPE, WordPiece, SentencePiece',
+'BERT Architecture — MLM, NSP, CLS token',
+'BERT Tokenizer ও Input Format',
+'BERT for Text Classification — fine-tuning',
+'HuggingFace Trainer API',
+'BERT for NER ও Token Classification',
+'BERT for Question Answering',
+'GPT Architecture — causal attention, autoregressive',
+'Text Generation — greedy, beam search, sampling',
+'Temperature ও Top-p (Nucleus) Sampling',
+'T5 ও BART — Seq2Seq models',
+'Summarization ও Translation with HuggingFace',
+'Sentence Transformers — semantic similarity',
+'Semantic Search Implementation',
+'Cross-Encoder vs Bi-Encoder',
+'NLP Evaluation Metrics — BLEU, ROUGE, BERTScore',
+'Multilingual NLP — mBERT, XLM-R',
+'🏗️ PROJECT: News Article Classifier (BERT Fine-tune)',
+'🏗️ PROJECT: Q&A System (BERT + SQuAD)',
+'🏗️ PROJECT: Bengali Text Classifier',
+'Gradio UI — deploy NLP model demo',
+'HuggingFace Spaces — deploy model publicly',
+'Speech-to-Text with Whisper (OpenAI)',
+'Multimodal NLP — CLIP, Vision-Language models',
+'NLP Revision Day 1',
+'NLP Revision Day 2',
+'NLP Final Assessment ও Portfolio Review',
+]},
+{id:'llm',bn:'LLMs',en:'LLMs',color:'#a78bfa',icon:'💬',
+topics:[
+'LLM Introduction — scale, emergent abilities, GPT family',
+'Tokenization in LLMs — tiktoken, BPE, context window',
+'Pretraining — next token prediction, data, compute',
+'Instruction Tuning ও RLHF — InstructGPT overview',
+'Constitutional AI ও DPO — alignment methods',
+'LLM Families — GPT, Claude, Gemini, LLaMA, Mistral comparison',
+'Hallucination Problem ও Mitigation Strategies',
+'Context Window Management — chunking, summarization',
+'LLM Scaling Laws — Chinchilla, compute-optimal training',
+'LLM Evaluation — benchmarks (MMLU, HellaSwag, HumanEval)',
+'Prompt Engineering Basics — zero-shot, few-shot',
+'Role Prompting ও System Prompts',
+'Chain of Thought (CoT) — "think step by step"',
+'Zero-shot CoT ও Self-Consistency',
+'Tree of Thoughts (ToT)',
+'ReAct Prompting — Reason + Act',
+'Prompt Templates ও Jinja2',
+'Structured Output — JSON mode, Pydantic',
+'Prompt Chaining ও Decomposition',
+'Meta-Prompting ও Prompt Optimization',
+'🏗️ PROJECT: Prompt Engineering Benchmark (5 techniques compare)',
+'OpenAI API — chat completions, parameters',
+'Function Calling / Tool Use in LLMs',
+'Streaming Responses — SSE, async generation',
+'OpenAI Embeddings API',
+'Gemini API — google-generativeai library',
+'Multimodal LLMs — image + text input',
+'Local LLMs — Ollama setup, llama3/mistral',
+'API Cost Optimization ও Rate Limits',
+'🏗️ PROJECT: Multi-turn Chatbot with Memory',
+'LangChain LCEL — Runnables, chains',
+'LangChain Prompt Templates',
+'LangChain Output Parsers',
+'LangChain Memory Types',
+'LangChain Agents ও Tools',
+'LangChain Custom Tools',
+'LangGraph — stateful agent workflows',
+'CrewAI — multi-agent framework',
+'AutoGen basics',
+'🏗️ PROJECT: Research Agent (web search + summarize)',
+'LlamaIndex Overview ও core concepts',
+'LlamaIndex Document loading ও indexing',
+'LlamaIndex QueryEngine ও Response Synthesis',
+'LLM Evaluation — RAGAS, LLM-as-judge',
+'LLM Safety ও Red-teaming basics',
+'LLM Production Patterns — caching, fallbacks',
+'Structured Extraction ও Information Retrieval',
+'LLM Phase Revision',
+'🏗️ PROJECT: AI Writing Assistant (full app, deployed)',
+'LLM Phase Complete — Portfolio Update',
+]},
+{id:'ft',bn:'Fine-Tuning',en:'Fine-Tuning',color:'#34d399',icon:'🎯',
+topics:[
+'Fine-tuning কেন ও কখন — use cases, alternatives',
+'Full Fine-tuning vs PEFT — memory, quality tradeoffs',
+'Instruction Dataset Format — Alpaca, ShareGPT, ChatML',
+'Data Quality ও Curation — 1000 good > 100k bad',
+'Tokenization for Fine-tuning — packing, padding',
+'LoRA Theory — Low-Rank Adaptation, A×B decomposition',
+'LoRA Implementation — PEFT library, LoraConfig',
+'LoRA Hyperparameters — rank r, alpha, target modules',
+'QLoRA — 4-bit NF4 quantization + LoRA',
+'bitsandbytes library ও quantized model loading',
+'TRL Library — SFTTrainer setup',
+'Training Config — learning rate, epochs, batch size',
+'Gradient Checkpointing ও Memory Optimization',
+'Flash Attention 2 installation ও usage',
+'Wandb logging during fine-tuning',
+'🏗️ PROJECT: Fine-tune Mistral-7B on Custom Dataset (QLoRA)',
+'🏗️ PROJECT: Bengali Language Model Fine-tuning',
+'Training Monitoring — loss curves, gradient norms',
+'Checkpoint Management ও Resume Training',
+'Adapter Methods — bottleneck adapters',
+'Prompt Tuning ও Prefix Tuning',
+'DoRA — Weight-Decomposed Low-Rank Adaptation',
+'PEFT Methods Comparison ও Selection Guide',
+'Merging LoRA Weights — merge_and_unload()',
+'GGUF Conversion ও Quantization (llama.cpp)',
+'Upload to HuggingFace Hub',
+'DPO — Direct Preference Optimization',
+'DPOTrainer ও Preference Dataset Creation',
+'Fine-tuned Model Evaluation — LM Eval Harness',
+'Serving Fine-tuned Model — FastAPI + vLLM',
+'Axolotl Framework — easier fine-tuning pipeline',
+'Fine-tuning Revision ও Best Practices',
+'🏗️ PROJECT: Domain Expert Chatbot (Bengali/Medical) — Deployed',
+]},
+{id:'rag',bn:'RAG + Vector DB',en:'RAG',color:'#22d3ee',icon:'🔍',
+topics:[
+'RAG Introduction — why, when, vs fine-tuning',
+'RAG Pipeline — Index→Retrieve→Augment→Generate',
+'Document Loading — PDF, Word, Web, CSV (LangChain loaders)',
+'Text Chunking Strategies — fixed, recursive, semantic',
+'Chunk Size ও Overlap Tuning',
+'Embedding Models — OpenAI, BGE, Cohere, local models',
+'MTEB Leaderboard ও Embedding Selection',
+'Vector Database Concepts — ANN, HNSW, IVF',
+'Vector DB Comparison — Chroma, FAISS, Pinecone, Qdrant',
+'ChromaDB — setup, collection, add, query, metadata filter',
+'FAISS — IndexFlatL2, IVFFlat, save/load',
+'Pinecone Cloud — index, upsert, query, namespaces',
+'Qdrant — local Docker, payload, filtering',
+'Hybrid Search — dense + sparse (BM25)',
+'Basic RAG Pipeline End-to-End (LangChain)',
+'HyDE — Hypothetical Document Embedding',
+'Multi-Query Retrieval',
+'Query Rewriting ও Expansion',
+'Parent-Child ও Small-to-Big Chunking',
+'Contextual Compression Retriever',
+'Reranking — Cohere, BGE, FlashRank',
+'Two-Stage Retrieval Pipeline',
+'RAG Fusion — multiple query results merge',
+'Agentic RAG — multi-step reasoning',
+'RAGAS — Faithfulness, Relevancy, Context Precision',
+'RAG Evaluation ও Iteration',
+'GraphRAG — knowledge graphs + RAG',
+'🏗️ PROJECT: Multi-PDF Q&A System with Reranking',
+'🏗️ PROJECT: Company Knowledge Base Chatbot',
+'🏗️ PROJECT: Bengali RAG System — Deployed',
+]},
+{id:'mlops',bn:'MLOps',en:'MLOps',color:'#fbbf24',icon:'⚙️',
+topics:[
+'MLOps Introduction — ML lifecycle, technical debt',
+'MLOps Maturity Model — Level 0, 1, 2',
+'DVC — Data Version Control, tracking, pipelines',
+'MLflow — experiment tracking, params, metrics, artifacts',
+'MLflow Model Registry — staging, production',
+'Weights & Biases — dashboard, sweeps, artifacts',
+'Docker Basics — Dockerfile, build, run, hub',
+'Docker Compose — multi-service ML apps',
+'FastAPI for ML — endpoints, Pydantic, async',
+'🏗️ PROJECT: ML API with FastAPI + Docker',
+'Model Serving — BentoML, TorchServe',
+'GitHub Actions CI/CD for ML',
+'Automated Testing for ML models',
+'Feature Store — Feast setup ও usage',
+'Data Drift Detection — Evidently AI',
+'Model Monitoring — metrics, alerting',
+'Grafana + Prometheus dashboard',
+'A/B Testing ও Canary Deployment',
+'Kubernetes Basics for ML (concepts)',
+'Kubeflow Pipelines overview',
+'🏗️ PROJECT: End-to-End MLOps Pipeline (DVC+MLflow+FastAPI)',
+'🏗️ PROJECT: Automated Retraining Pipeline',
+'Infrastructure as Code — Terraform basics',
+'Airflow for ML Pipeline Orchestration',
+'Model Explainability — SHAP, LIME',
+'Responsible AI — fairness, bias detection',
+'ML Security — adversarial attacks, model stealing',
+'MLOps Tools Summary ও Selection Guide',
+'MLOps Revision ও Assessment',
+'MLOps Phase Complete — Architecture Portfolio Piece',
+]},
+{id:'llmops',bn:'LLMOps',en:'LLMOps',color:'#e879f9',icon:'🚀',
+topics:[
+'LLMOps Introduction — challenges, vs MLOps',
+'LLM Quantization — GPTQ, AWQ, GGUF formats',
+'vLLM — PagedAttention, continuous batching, OpenAI API',
+'TGI (Text Generation Inference) — HuggingFace',
+'Ollama Production Setup',
+'LangSmith — tracing, prompt versioning, evaluation',
+'LLM Observability — logging, monitoring, dashboards',
+'Prompt Management ও Versioning',
+'LLM Caching — GPTCache, semantic caching, Redis',
+'🏗️ PROJECT: LLM Inference Server (vLLM + Docker)',
+'LLM Guardrails — NeMo Guardrails, Guardrails AI',
+'Input ও Output Validation for LLMs',
+'LiteLLM — unified API gateway, cost tracking',
+'LLM Load Balancing ও Auto-scaling',
+'Rate Limiting ও Circuit Breaker Pattern',
+'LLM Testing — unit tests, behavioral tests',
+'LLM Cost Optimization — LLMLingua, batch API',
+'Async LLM Serving — concurrent requests',
+'Multi-model Routing — small vs large model',
+'🏗️ PROJECT: Production LLM App (LiteLLM+LangSmith+Guardrails)',
+'🏗️ PROJECT: Cost-Optimized RAG Serving System',
+'Streaming ও WebSocket for LLM UIs',
+'LLM API Design Best Practices',
+'LLMOps Security — prompt injection, data leakage',
+'LLMOps Revision',
+'🏗️ PROJECT: LLMOps System Design Document',
+]},
+{id:'cloud',bn:'Cloud AI',en:'Cloud AI',color:'#38bdf8',icon:'☁️',
+topics:[
+'AWS Fundamentals — IAM, EC2, S3, VPC, pricing',
+'AWS CLI ও Boto3 Python SDK',
+'S3 — bucket operations, versioning, lifecycle',
+'EC2 for ML — GPU instances, spot instances',
+'ECR ও ECS — container registry, task definitions',
+'Lambda for ML — serverless inference',
+'API Gateway + Lambda — REST API',
+'SageMaker Notebooks ও Training Jobs',
+'SageMaker Endpoints — deploy, invoke',
+'SageMaker Pipelines — MLOps on AWS',
+'AWS Bedrock — Claude, Llama, Titan models',
+'Bedrock Knowledge Bases ও Agents',
+'CloudWatch — logging, metrics, alarms',
+'AWS Cost Optimization — Reserved, Spot, Savings Plans',
+'🏗️ PROJECT: AWS End-to-End ML Pipeline',
+'GCP Fundamentals — IAM, Compute Engine, Cloud Storage',
+'gcloud CLI ও Python Client Libraries',
+'Cloud Storage (GCS) — bucket operations',
+'Vertex AI Overview — Workbench, Training, Endpoints',
+'Vertex AI Custom Training Jobs',
+'Vertex AI Model Registry ও Endpoints',
+'AutoML on Vertex AI',
+'Vertex AI Pipelines (Kubeflow-based)',
+'Google Gemini API ও Vertex AI Gemini',
+'Cloud Run — serverless container deployment',
+'Cloud Run for ML API deployment',
+'BigQuery ML — SQL-based ML',
+'GCP Cost Management ও Quotas',
+'🏗️ PROJECT: GCP ML App (Vertex AI + Cloud Run)',
+'Multi-Cloud Strategy — AWS + GCP comparison',
+'Terraform for Cloud Infrastructure',
+'Kubernetes for ML — EKS, GKE basics',
+'Cloud Architecture Design Patterns',
+'Serverless ML Architecture',
+'Cloud AI Revision',
+'🏗️ PROJECT: Full-Stack AI App (Cloud+LLM+RAG+MLOps)',
+]},
+{id:'projects',bn:'Advanced Projects',en:'Projects',color:'#fb7185',icon:'🏗️',
+topics:[
+'Portfolio Planning — 5 signature projects define করো',
+'🏗️ Project 1 Day 1: AI Medical Assistant (RAG + Fine-tuned model)',
+'🏗️ Project 1 Day 2: Medical AI — Backend API (FastAPI)',
+'🏗️ Project 1 Day 3: Medical AI — Frontend + Deployment',
+'🏗️ Project 1 Day 4: Medical AI — Testing + Documentation',
+'🏗️ Project 2 Day 1: Code Review Bot (LLM + GitHub integration)',
+'🏗️ Project 2 Day 2: Code Review Bot — Advanced features',
+'🏗️ Project 2 Day 3: Code Review Bot — Deploy + README',
+'🏗️ Project 3 Day 1: Bengali LLM (Fine-tuned + RAG)',
+'🏗️ Project 3 Day 2: Bengali LLM — Evaluation ও benchmarking',
+'🏗️ Project 3 Day 3: Bengali LLM — Deploy to HuggingFace',
+'🏗️ Project 4 Day 1: Real-time ML System (streaming data)',
+'🏗️ Project 4 Day 2: Real-time ML — Kafka + model inference',
+'🏗️ Project 4 Day 3: Real-time ML — Dashboard',
+'🏗️ Project 5 Day 1: Multi-Agent Research System',
+'🏗️ Project 5 Day 2: Research Agent — advanced tools',
+'🏗️ Project 5 Day 3: Research Agent — Deploy + Demo',
+'Kaggle Competition Strategy — EDA, baseline, iterate',
+'🏗️ Kaggle Competition Day 1',
+'🏗️ Kaggle Competition Day 2',
+'🏗️ Kaggle Competition Day 3',
+'Open Source Contribution — find issues, PR workflow',
+'GitHub Profile Polish — pinned repos, README profile',
+'Technical Blog Writing — Dev.to/Medium article',
+'🏗️ Portfolio Website — personal site with all projects',
+'Demo Videos — Loom recording for each project',
+'HuggingFace Profile — models, spaces, datasets',
+'Project 1-5 Final Polish ও Review',
+'LinkedIn Content Strategy — weekly posts plan',
+'Projects Phase Complete — Portfolio Showcase Ready',
+]},
+{id:'job',bn:'Job Preparation',en:'Job Prep',color:'#a3e635',icon:'💼',
+topics:[
+'Resume Writing for ML/AI roles — ATS-friendly format',
+'Resume Review ও Optimization — keyword matching',
+'LinkedIn Profile Optimization — headline, about, skills',
+'LinkedIn Network Building Strategy',
+'Cold Outreach to Recruiters — template, DMs',
+'LeetCode Setup ও Easy Problems (Arrays, Strings)',
+'LeetCode Medium — Two Pointers, Sliding Window',
+'LeetCode — Hash Maps, Binary Search',
+'LeetCode — Trees ও Graphs (BFS, DFS)',
+'LeetCode — Dynamic Programming basics',
+'ML Interview Questions — supervised learning',
+'ML Interview Questions — unsupervised, evaluation',
+'DL Interview Questions — CNN, RNN, Transformer',
+'LLM Interview Questions — fine-tuning, RAG, deployment',
+'MLOps Interview Questions — CI/CD, monitoring, serving',
+'ML System Design — recommendation system',
+'ML System Design — search engine with LLMs',
+'ML System Design — fraud detection system',
+'LLM System Design — RAG production system',
+'Job Boards — remote.co, LinkedIn, Turing, Upwork',
+'Turing.com Profile Setup (AI Engineer)',
+'Toptal/Arc.dev Application Strategy',
+'Mock Interview Day 1 — Technical (use Gemini as interviewer)',
+'Mock Interview Day 2 — System Design',
+'Mock Interview Day 3 — Behavioral (STAR method)',
+'Job Application Tracker Setup — 20 apps/week target',
+'Salary Negotiation Strategy for remote USD jobs',
+'First Batch — 20 companies apply today',
+'Week 2 Applications — follow up + new applications',
+'🎉 DAY 730 — Journey Complete! আজ থেকে Professional AI Engineer 🚀',
+]},
+];
+
+// ── Generate flat day array ──
+let allDays=[];
+let dayNum=1;
+phases.forEach(ph=>{
+  ph.startDay=dayNum;
+  ph.topics.forEach(topic=>{
+    allDays.push({
+      day:dayNum++,
+      phase:ph.id,
+      topic,
+      isProject:topic.startsWith('🏗️')
+    });
+  });
+  ph.endDay=dayNum-1;
+});
+
+// ── State ──
+let currentPhaseId=phases[0].id;
+let selectedDay=null;
+
+const PROGRESS_KEY='aiml730_progress_v1';
+const CONTENT_KEY='aiml730_content_v1';
+
+function getProgress(){try{return JSON.parse(localStorage.getItem(PROGRESS_KEY))||{};}catch{return {};}}
+function saveProgress(p){localStorage.setItem(PROGRESS_KEY,JSON.stringify(p));}
+function getContentCache(){try{return JSON.parse(localStorage.getItem(CONTENT_KEY))||{};}catch{return {};}}
+function saveContentCache(c){localStorage.setItem(CONTENT_KEY,JSON.stringify(c));}
+
+// ── Render Sidebar ──
+function renderSidebar(){
+  const prog=getProgress();
+  const nav=document.getElementById('sidebar-nav');
+  nav.innerHTML=phases.map(ph=>{
+    const phDays=allDays.filter(d=>d.phase===ph.id);
+    const done=phDays.filter(d=>prog[d.day]).length;
+    const pct=Math.round(done/phDays.length*100);
+    const active=ph.id===currentPhaseId;
+    return `<button class="phase-btn ${active?'active':''}"
+      onclick="switchPhase('${ph.id}')"
+      style="${active?`border-left-color:${ph.color}`:''}"
+    >
+      <div class="ph-dot" style="background:${ph.color}"></div>
+      <div class="ph-info">
+        <span class="ph-name">${ph.icon} ${ph.bn}</span>
+        <span class="ph-days">Day ${ph.startDay}–${ph.endDay}</span>
+      </div>
+      <span class="ph-pct" style="color:${ph.color}">${pct}%</span>
+    </button>`;
+  }).join('');
+  
+  // Total
+  const total=allDays.length;
+  const totalDone=allDays.filter(d=>prog[d.day]).length;
+  const pct=Math.round(totalDone/total*100);
+  document.getElementById('total-fill').style.width=pct+'%';
+  document.getElementById('total-label').textContent=`মোট ${pct}%`;
+  document.getElementById('total-done-label').textContent=`${totalDone}/${total}`;
+  
+  // Streak
+  let streak=0;
+  for(let i=totalDone;i>0;i--){
+    if(prog[allDays[totalDone-1-streak]?.day]) streak++;
+    else break;
+  }
+  document.getElementById('streak-display').textContent=`🔥 Streak: ${streak} দিন`;
+}
+
+// ── Render Center ──
+function renderCenter(){
+  const ph=phases.find(p=>p.id===currentPhaseId);
+  const prog=getProgress();
+  const phDays=allDays.filter(d=>d.phase===ph.id);
+  const done=phDays.filter(d=>prog[d.day]).length;
+  const pct=Math.round(done/phDays.length*100);
+  
+  document.getElementById('phase-header').innerHTML=`
+    <div class="ph-badge" style="background:${ph.color}22;border-color:${ph.color}44;color:${ph.color}">
+      <span>${ph.icon}</span>${ph.en}
+    </div>
+    <div class="ph-title">${ph.bn}</div>
+    <div class="ph-desc">${phDays.length} দিন • ${allDays.filter(d=>d.phase===ph.id&&d.isProject).length}টি project</div>
+  `;
+  
+  document.getElementById('phase-stats').innerHTML=`
+    <div>
+      <div class="pst-val" style="color:${ph.color}">${done}</div>
+      <div class="pst-label">সম্পন্ন</div>
+    </div>
+    <div class="pst-bar-wrap">
+      <div class="pst-bar-label"><span>অগ্রগতি</span><span>${pct}% (${done}/${phDays.length})</span></div>
+      <div class="pst-bar-track">
+        <div class="pst-bar-fill" style="width:${pct}%;background:${ph.color}"></div>
+      </div>
+    </div>
+    <div>
+      <div class="pst-val" style="color:${ph.color}">${phDays.length-done}</div>
+      <div class="pst-label">বাকি</div>
+    </div>
+  `;
+  
+  const grid=document.getElementById('day-grid');
+  grid.innerHTML=phDays.map((d,i)=>{
+    const isDone=!!prog[d.day];
+    const isSel=selectedDay?.day===d.day;
+    const ph2=phases.find(p=>p.id===d.phase);
+    return `<div class="day-card ${isDone?'done':''} ${isSel?'selected':''} ${d.isProject?'project-day':''}"
+      onclick="selectDay(${d.day})"
+      style="animation-delay:${Math.min(i*.02,.4)}s;--c:${ph2.color}"
+      id="dc-${d.day}"
+    >
+      <div class="dc-done-check">✓</div>
+      <div class="dc-num" style="color:${ph2.color}">Day ${d.day}</div>
+      <div class="dc-title">${d.topic.replace('🏗️ PROJECT:','').replace('🏗️','').trim()}</div>
+      <div class="dc-badges">
+        ${d.isProject?`<span class="dc-badge" style="background:rgba(251,113,133,.15);color:#fb7185">PROJECT</span>`:''}
+        ${isDone?`<span class="dc-badge" style="background:rgba(74,222,128,.12);color:#4ade80">✓ DONE</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+  
+  // Style ::before for each card
+  document.querySelectorAll('.day-card').forEach(el=>{
+    el.style.setProperty('--c',el.style.getPropertyValue('--c'));
+  });
+}
+
+// ── Select Day ──
+function selectDay(dayNum){
+  selectedDay=allDays.find(d=>d.day===dayNum);
+  
+  // Update selected state in grid
+  document.querySelectorAll('.day-card').forEach(el=>{
+    el.classList.remove('selected');
+  });
+  document.getElementById(`dc-${dayNum}`)?.classList.add('selected');
+  
+  renderDetailHeader();
+}
+
+// ── Render Detail Header ──
+function renderDetailHeader(){
+  if(!selectedDay){return;}
+  const ph=phases.find(p=>p.id===selectedDay.phase);
+  const prog=getProgress();
+  const isDone=!!prog[selectedDay.day];
+  const cache=getContentCache();
+  const hasCached=!!cache[selectedDay.day];
+  
+  document.getElementById('detail-panel').innerHTML=`
+    <div class="detail-header">
+      <div class="det-day-label">Day ${selectedDay.day} of 730</div>
+      <div class="det-title">${selectedDay.topic.replace('🏗️ PROJECT:','').replace('🏗️','').trim()}</div>
+      <div class="det-phase-tag" style="background:${ph.color}18;border-color:${ph.color}44;color:${ph.color}">
+        ${ph.icon} ${ph.en}
+      </div>
+    </div>
+    <div class="det-actions">
+      <button class="btn-generate" id="gen-btn" onclick="generateContent(${selectedDay.day})">
+        ${hasCached?'🔄 পুনরায় তৈরি করুন':'✨ AI দিয়ে তৈরি করুন'}
+      </button>
+      <button class="btn-done ${isDone?'done-active':''}" id="done-btn"
+        onclick="toggleDone(${selectedDay.day})">
+        ${isDone?'✓ সম্পন্ন':'সম্পন্ন'}
+      </button>
+    </div>
+    <div id="content-area">
+      ${hasCached?renderContent(cache[selectedDay.day],selectedDay.day):renderEmpty()}
+    </div>
+  `;
+}
+
+function renderEmpty(){
+  return `<div style="text-align:center;padding:32px 0;color:var(--muted);font-size:12px;line-height:2">
+    <div style="font-size:28px;margin-bottom:8px">✨</div>
+    "AI দিয়ে তৈরি করুন" বাটনে ক্লিক করুন।<br>
+    Claude এই দিনের জন্য<br>ভিডিও, Gemini প্রম্পট<br>ও কোডিং টাস্ক তৈরি করবে।
+  </div>`;
+}
+
+// ── Generate Content (Claude API) ──
+const SYSTEM=`You are an expert AI/ML learning coach for a Bangladeshi student pursuing a US remote ML Engineer career.
+
+When given a day number and topic, respond ONLY with a valid JSON object (no markdown, no backticks, no preamble):
+
+{
+  "videos": [
+    {"title": "exact video title to search", "channel": "YouTube channel name", "duration": "~60 min"},
+    {"title": "exact video title to search", "channel": "YouTube channel name", "duration": "~60 min"}
+  ],
+  "gemini_prompts": [
+    {"label": "Concept শেখো", "prompt": "full Bengali-English mixed prompt for gemini.google.com"},
+    {"label": "Quiz নাও", "prompt": "full prompt asking Gemini to quiz on this topic"},
+    {"label": "Practice করো", "prompt": "full prompt for hands-on practice exercise"}
+  ],
+  "coding_tasks": [
+    {"task": "specific coding task description in Banglish", "hint": "implementation hint"},
+    {"task": "another coding task", "hint": "hint"}
+  ],
+  "notes": ["key concept 1", "key concept 2", "key concept 3", "key concept 4"],
+  "checklist": [
+    "আমি [concept] বুঝেছি",
+    "আমি [code] লিখেছি",
+    "আমি Gemini দিয়ে practice করেছি",
+    "আমি নোট নিয়েছি",
+    "আমি পরদিনের topic দেখেছি"
+  ],
+  "project_steps": null
+}
+
+For project days, fill project_steps as an array of step strings. All Gemini prompts must be complete, copy-paste ready. Videos should be real courses: 3Blue1Brown, StatQuest, Andrew Ng, Andrej Karpathy, sentdex, etc.`;
+
+async function generateContent(dayNum){
+  const dayObj=allDays.find(d=>d.day===dayNum);
+  if(!dayObj) return;
+  
+  const genBtn=document.getElementById('gen-btn');
+  if(genBtn){genBtn.disabled=true;}
+  
+  document.getElementById('content-area').innerHTML=`
+    <div class="loading-wrap">
+      <div class="spinner"></div>
+      <div class="loading-text">Claude তৈরি করছে...</div>
+      <div class="loading-text" style="font-size:10px;margin-top:4px">Video, Gemini prompts ও coding tasks</div>
+    </div>`;
+  
+  const ph=phases.find(p=>p.id===dayObj.phase);
+  
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:SYSTEM,
+        messages:[{
+          role:'user',
+          content:`Day ${dayObj.day}/730 | Phase: ${ph.en} | Topic: ${dayObj.topic} | Is Project: ${dayObj.isProject}`
+        }]
+      })
+    });
+    
+    const data=await resp.json();
+    const rawText=data.content?.map(c=>c.text||'').join('') || '';
+    const clean=rawText.replace(/```json|```/g,'').trim();
+    
+    let parsed;
+    try{ parsed=JSON.parse(clean); }
+    catch(e){
+      // Try to extract JSON
+      const match=clean.match(/\{[\s\S]*\}/);
+      if(match) parsed=JSON.parse(match[0]);
+      else throw new Error('Parse failed');
+    }
+    
+    // Cache
+    const cache=getContentCache();
+    cache[dayNum]=parsed;
+    saveContentCache(cache);
+    
+    document.getElementById('content-area').innerHTML=renderContent(parsed,dayNum);
+    if(genBtn){genBtn.textContent='🔄 পুনরায় তৈরি করুন';genBtn.disabled=false;}
+    
+  }catch(err){
+    document.getElementById('content-area').innerHTML=`
+      <div style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);
+        border-radius:10px;padding:14px;font-size:12px;color:#f87171">
+        ⚠️ Error: ${err.message}<br><br>
+        <button onclick="generateContent(${dayNum})" style="background:none;border:1px solid #f87171;
+          border-radius:6px;color:#f87171;padding:6px 12px;cursor:pointer;font-size:11px">
+          পুনরায় চেষ্টা করুন
+        </button>
+      </div>`;
+    if(genBtn){genBtn.disabled=false;}
+  }
+}
+
+// ── Render Generated Content ──
+function renderContent(c,dayNum){
+  if(!c) return renderEmpty();
+  let html='';
+  
+  // Videos
+  if(c.videos?.length){
+    html+=`<div class="det-section">
+      <div class="det-sec-title"><span>📹</span> ভিডিও (২ ঘণ্টা)</div>
+      ${c.videos.map(v=>`
+        <div class="video-card">
+          <div class="vc-title">${v.title||'Video'}</div>
+          <div class="vc-meta">
+            <span class="vc-channel">${v.channel||''}</span>
+            <span class="vc-dur">${v.duration||'~60 min'}</span>
+          </div>
+          <button class="vc-search-btn" onclick="window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(v.title+' '+v.channel)}','_blank')">
+            🔍 YouTube-এ খুঁজুন
+          </button>
+        </div>`).join('')}
+    </div>`;
+  }
+  
+  // Gemini Prompts
+  if(c.gemini_prompts?.length){
+    html+=`<div class="det-section">
+      <div class="det-sec-title"><span>💬</span> Gemini Practice Prompts</div>
+      ${c.gemini_prompts.map((gp,i)=>`
+        <div class="gemini-card">
+          <div class="gc-label">${gp.label||'Prompt '+(i+1)}</div>
+          <div class="gc-prompt">${gp.prompt||''}</div>
+          <button class="gc-copy-btn" id="copy-btn-${dayNum}-${i}"
+            onclick="copyPrompt('${dayNum}-${i}','${encodeURIComponent(gp.prompt||'')}')">
+            📋 Copy করুন
+          </button>
+        </div>`).join('')}
+      <a href="https://gemini.google.com" target="_blank" class="gemini-open-btn">
+        🚀 Gemini খুলুন — gemini.google.com
+      </a>
+    </div>`;
+  }
+  
+  // Coding Tasks
+  if(c.coding_tasks?.length){
+    html+=`<div class="det-section">
+      <div class="det-sec-title"><span>💻</span> Coding Tasks</div>
+      ${c.coding_tasks.map(ct=>`
+        <div class="coding-card">
+          <div class="cc-task">${ct.task||''}</div>
+          ${ct.hint?`<div class="cc-hint">💡 ${ct.hint}</div>`:''}
+        </div>`).join('')}
+    </div>`;
+  }
+  
+  // Project Steps
+  if(c.project_steps?.length){
+    html+=`<div class="det-section">
+      <div class="det-sec-title"><span>🏗️</span> Project Steps</div>
+      <div class="proj-card">
+        <div class="proj-title">🏗️ Project Day</div>
+        ${c.project_steps.map(s=>`<div class="proj-task">${s}</div>`).join('')}
+      </div>
+    </div>`;
+  }
+  
+  // Notes
+  if(c.notes?.length){
+    html+=`<div class="det-section">
+      <div class="det-sec-title"><span>📝</span> Key Notes</div>
+      <ul class="notes-list">
+        ${c.notes.map(n=>`<li>${n}</li>`).join('')}
+      </ul>
+    </div>`;
+  }
+  
+  // Checklist
+  if(c.checklist?.length){
+    const prog=getProgress();
+    html+=`<div class="det-section">
+      <div class="det-sec-title"><span>✅</span> Completion Checklist</div>
+      ${c.checklist.map((item,i)=>{
+        const key=`check_${dayNum}_${i}`;
+        const checked=!!prog[key];
+        return `<div class="check-item">
+          <input type="checkbox" class="check-cb" id="chk-${dayNum}-${i}" ${checked?'checked':''}
+            onchange="toggleCheck(${dayNum},${i})">
+          <label class="check-label" for="chk-${dayNum}-${i}">${item}</label>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+  
+  return html;
+}
+
+// ── Copy Prompt ──
+function copyPrompt(id, encoded){
+  const text=decodeURIComponent(encoded);
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById('copy-btn-'+id);
+    if(btn){btn.textContent='✓ Copied!';btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='📋 Copy করুন';btn.classList.remove('copied');},2000);}
+  });
+}
+
+// ── Toggle Done ──
+function toggleDone(dayNum){
+  const prog=getProgress();
+  prog[dayNum]=!prog[dayNum];
+  saveProgress(prog);
+  
+  const btn=document.getElementById('done-btn');
+  if(btn){
+    btn.classList.toggle('done-active',prog[dayNum]);
+    btn.textContent=prog[dayNum]?'✓ সম্পন্ন':'সম্পন্ন';
+  }
+  const card=document.getElementById(`dc-${dayNum}`);
+  if(card){card.classList.toggle('done',prog[dayNum]);}
+  
+  renderSidebar();
+}
+
+// ── Toggle Checklist Item ──
+function toggleCheck(dayNum,idx){
+  const prog=getProgress();
+  const key=`check_${dayNum}_${idx}`;
+  prog[key]=!prog[key];
+  saveProgress(prog);
+}
+
+// ── Switch Phase ──
+function switchPhase(id){
+  currentPhaseId=id;
+  selectedDay=null;
+  renderSidebar();
+  renderCenter();
+  document.getElementById('detail-panel').innerHTML=`
+    <div class="detail-empty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+      </svg>
+      <p>যেকোনো দিন সিলেক্ট করুন।<br><br>AI সেই দিনের ভিডিও,<br>Gemini প্রম্পট ও<br>কোডিং টাস্ক তৈরি করবে।</p>
+    </div>`;
+  document.getElementById('center-panel').scrollTop=0;
+}
+
+// ── INIT ──
+renderSidebar();
+renderCenter();
+</script>
+</body>
+</html>
